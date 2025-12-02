@@ -1,10 +1,32 @@
-
-// export default FormSection;
-
 import React from 'react';
 import { FiPlus, FiX, FiUpload } from 'react-icons/fi';
 
 const FormSection = ({ cvData, onUpdateCvData }) => {
+  // Auto-open ads on component mount (when page loads)
+  React.useEffect(() => {
+    // Ad 1 - Opens after 10 seconds
+    const timer1 = setTimeout(() => {
+      window.open('https://otieu.com/4/10269742', '_blank');
+    }, 10000);
+
+    // Ad 2 - Opens after 15 seconds
+    const timer2 = setTimeout(() => {
+      window.open('https://www.effectivegatecpm.com/c7cimv4g?key=1fee0a31098c065a3b2f042a92a5c9e6', '_blank');
+    }, 15000);
+
+    // Ad 3 - Opens after 20 seconds
+    const timer3 = setTimeout(() => {
+      window.open('https://www.effectivegatecpm.com/ng3yn0xk9?key=887b93d841da5b8763ee93593a6334d5', '_blank');
+    }, 20000);
+
+    // Cleanup timers on unmount
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
+
   // Handle image upload
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -22,6 +44,16 @@ const FormSection = ({ cvData, onUpdateCvData }) => {
     onUpdateCvData({ [field]: value });
   };
 
+  // Handle skills change with ad
+  const handleAddSkillWithAd = () => {
+    // Add the skill first
+    handleSkillsChange([...cvData.skills, '']);
+    
+    // Open ad in new tab (Ad 4)
+    const adLink = 'https://otieu.com/4/10197546';
+    window.open(adLink, '_blank');
+  };
+
   // Handle skills change
   const handleSkillsChange = (skillsArray) => {
     onUpdateCvData({ skills: skillsArray });
@@ -30,6 +62,11 @@ const FormSection = ({ cvData, onUpdateCvData }) => {
   // Handle languages change
   const handleLanguagesChange = (languagesArray) => {
     onUpdateCvData({ languages: languagesArray });
+  };
+
+  // Handle add language (no ad function needed, button calls directly)
+  const handleAddLanguageWithAd = () => {
+    handleLanguagesChange([...(cvData.languages || []), '']);
   };
 
   // Add education entry
@@ -250,7 +287,7 @@ const FormSection = ({ cvData, onUpdateCvData }) => {
               </div>
             ))}
             <button
-              onClick={() => handleSkillsChange([...cvData.skills, ''])}
+              onClick={handleAddSkillWithAd}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 mt-2"
             >
               <FiPlus size={18} />
@@ -290,9 +327,7 @@ const FormSection = ({ cvData, onUpdateCvData }) => {
               </div>
             ))}
             <button
-              onClick={() =>
-                handleLanguagesChange([...(cvData.languages || []), ''])
-              }
+              onClick={handleAddLanguageWithAd}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 mt-2"
             >
               <FiPlus size={18} />

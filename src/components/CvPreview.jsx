@@ -7,212 +7,59 @@ const CvPreview = ({ cvData }) => {
   const cvRef = useRef(null);
 
   const downloadPDF = async () => {
-  try {
-    const element = cvRef.current;
+    try {
+      const element = cvRef.current;
 
-    // Capture the CV as an image with higher quality
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      backgroundColor: '#ffffff',
-      allowTaint: true,
-      width: element.offsetWidth,
-      height: element.offsetHeight,
-    });
+      // Capture the CV as an image with higher quality
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        allowTaint: true,
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+      });
 
-    const imgData = canvas.toDataURL('image/png');
-    const pdfWidth = 210;
-    const pdfHeight = 297;
-    const imgWidth = pdfWidth;
-    const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+      const imgData = canvas.toDataURL('image/png');
+      const pdfWidth = 210;
+      const pdfHeight = 297;
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
 
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-      compress: true,
-    });
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+        compress: true,
+      });
 
-    if (imgHeight <= pdfHeight) {
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-    } else {
-      let heightLeft = imgHeight;
-      let position = 0;
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pdfHeight;
-
-      while (heightLeft > 0) {
-        position = -(imgHeight - heightLeft);
-        pdf.addPage();
+      if (imgHeight <= pdfHeight) {
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      } else {
+        let heightLeft = imgHeight;
+        let position = 0;
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pdfHeight;
+
+        while (heightLeft > 0) {
+          position = -(imgHeight - heightLeft);
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pdfHeight;
+        }
       }
+
+      pdf.save(`${cvData.fullName || 'CV'}.pdf`);
+
+      // ✅ OPEN AD - ONLY 1 TAB (Ad 5)
+      window.open('https://otieu.com/4/10197550', '_blank');
+
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Error downloading PDF. Please try again.');
     }
-
-    pdf.save(`${cvData.fullName || 'CV'}.pdf`);
-
-    // ✅ OPEN 3 TABS - ALL AT ONCE (NO DELAY)
-    const adsterraLinks = [
-      'https://otieu.com/4/10184381',
-      'https://otieu.com/4/10184347',
-      'https://otieu.com/4/10197550'
-    ];
-
-    // Open all 3 tabs immediately
-    window.open(adsterraLinks[0], '_blank');
-    window.open(adsterraLinks[1], '_blank');
-    window.open(adsterraLinks[2], '_blank');
-
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    alert('Error downloading PDF. Please try again.');
-  }
-};
-
-
-
-// // Download CV as PDF - Fixed version with proper pagination
-//   const downloadPDF = async () => {
-//     try {
-//       const element = cvRef.current;
-
-//       // Capture the CV as an image with higher quality
-//       const canvas = await html2canvas(element, {
-//         scale: 2,
-//         useCORS: true,
-//         logging: false,
-//         backgroundColor: '#ffffff',
-//         allowTaint: true,
-//         width: element.offsetWidth,
-//         height: element.offsetHeight,
-//       });
-
-//       const imgData = canvas.toDataURL('image/png');
-
-//       // A4 dimensions in mm
-//       const pdfWidth = 210;
-//       const pdfHeight = 297;
-
-//       // Calculate image dimensions to fit PDF width
-//       const imgWidth = pdfWidth;
-//       const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-//       // Create PDF
-//       const pdf = new jsPDF({
-//         orientation: 'portrait',
-//         unit: 'mm',
-//         format: 'a4',
-//         compress: true,
-//       });
-
-//       // If content fits on one page
-//       if (imgHeight <= pdfHeight) {
-//         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-//       } else {
-//         // Content spans multiple pages
-//         let heightLeft = imgHeight;
-//         let position = 0;
-
-//         // Add first page
-//         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-//         heightLeft -= pdfHeight;
-
-//         // Add subsequent pages
-//         while (heightLeft > 0) {
-//           position = -(imgHeight - heightLeft);
-//           pdf.addPage();
-//           pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-//           heightLeft -= pdfHeight;
-//         }
-//       }
-
-//       pdf.save(`${cvData.fullName || 'CV'}.pdf`);
-
-//       // Open 3 Adsterra ad links in new tabs
-//       // Replace these URLs with your actual Adsterra direct link URLs
-//       const adsterraLinks = [
-//         'https://www.google.com/search?q=dog&rlz=1C1GCEU_en-gbLK1103LK1103&oq=dog&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyFQgBEC4YQxiDARixAxjJAxiABBiKBTIPCAIQABhDGLEDGIAEGIoFMgwIAxAAGEMYgAQYigUyDQgEEAAYkgMYgAQYigUyDQgFEAAYkgMYgAQYigUyDAgGEAAYQxiABBiKBTIPCAcQLhhDGLEDGIAEGIoFMgwICBAAGEMYgAQYigUyDAgJEAAYQxiABBiKBdIBCDE3OTdqMGo5qAIAsAIA&sourceid=chrome&ie=UTF-8',
-//         'https://www.google.com/search?q=cat&rlz=1C1GCEU_en-gbLK1103LK1103&oq=cat&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyDQgBEC4YgwEYsQMYgAQyBggCEEUYPDIGCAMQRRg8MgYIBBBFGEEyBggFEEUYPDIGCAYQRRg8MgYIBxBFGEHSAQc3NDRqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8',
-//         'https://www.google.com/search?q=cat&rlz=1C1GCEU_en-gbLK1103LK1103&oq=cat&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyDQgBEC4YgwEYsQMYgAQyBggCEEUYPDIGCAMQRRg8MgYIBBBFGEEyBggFEEUYPDIGCAYQRRg8MgYIBxBFGEHSAQc3NDRqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8'
-//       ];
-
-//       // Open each ad link in a new tab with a small delay between each
-//       adsterraLinks.forEach((link, index) => {
-//         setTimeout(() => {
-//           window.open(link, '_blank', 'noopener,noreferrer');
-//         }, index * 300); // 300ms delay between each tab
-//       });
-
-//     } catch (error) {
-//       console.error('Error generating PDF:', error);
-//       alert('Error downloading PDF. Please try again.');
-//     }
-//   };
-
-
-//........................................................................
-  // // Download CV as PDF - Fixed version with proper pagination
-  // const downloadPDF = async () => {
-  //   try {
-  //     const element = cvRef.current;
-
-  //     // Capture the CV as an image with higher quality
-  //     const canvas = await html2canvas(element, {
-  //       scale: 2,
-  //       useCORS: true,
-  //       logging: false,
-  //       backgroundColor: '#ffffff',
-  //       allowTaint: true,
-  //       width: element.offsetWidth,
-  //       height: element.offsetHeight,
-  //     });
-
-  //     const imgData = canvas.toDataURL('image/png');
-
-  //     // A4 dimensions in mm
-  //     const pdfWidth = 210;
-  //     const pdfHeight = 297;
-
-  //     // Calculate image dimensions to fit PDF width
-  //     const imgWidth = pdfWidth;
-  //     const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-  //     // Create PDF
-  //     const pdf = new jsPDF({
-  //       orientation: 'portrait',
-  //       unit: 'mm',
-  //       format: 'a4',
-  //       compress: true,
-  //     });
-
-  //     // If content fits on one page
-  //     if (imgHeight <= pdfHeight) {
-  //       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-  //     } else {
-  //       // Content spans multiple pages
-  //       let heightLeft = imgHeight;
-  //       let position = 0;
-
-  //       // Add first page
-  //       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  //       heightLeft -= pdfHeight;
-
-  //       // Add subsequent pages
-  //       while (heightLeft > 0) {
-  //         position = -(imgHeight - heightLeft);
-  //         pdf.addPage();
-  //         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  //         heightLeft -= pdfHeight;
-  //       }
-  //     }
-
-  //     pdf.save(`${cvData.fullName || 'CV'}.pdf`);
-  //   } catch (error) {
-  //     console.error('Error generating PDF:', error);
-  //     alert('Error downloading PDF. Please try again.');
-  //   }
-  // };
+  };
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
