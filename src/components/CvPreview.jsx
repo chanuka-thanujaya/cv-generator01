@@ -348,7 +348,7 @@ const CvPreview = ({ cvData }) => {
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2 shadow-md"
         >
           <FiDownload size={20} />
-          Download as PDF
+          Download PDF - Ad Supported
         </button>
       </div>
     </div>

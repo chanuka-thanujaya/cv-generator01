@@ -25,7 +25,7 @@ const FormSection = ({ cvData, onUpdateCvData }) => {
     handleSkillsChange([...cvData.skills, '']);
     
     // Open ad in new tab (Ad 4)
-    const adLink = 'https://www.effectivegatecpm.com/c7cimv4g?key=1fee0a31098c065a3b2f042a92a5c9e6';
+    const adLink = 'https://www.effectivegatecpm.com/cpdfz7vg0?key=02c361cfa0ecf75c56d9d091d4c5dd24';
     window.open(adLink, '_blank');
   };
 
@@ -266,7 +266,7 @@ const FormSection = ({ cvData, onUpdateCvData }) => {
               className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 mt-2"
             >
               <FiPlus size={18} />
-              Add Skill
+              Click to Unlock Add Skill
             </button>
           </div>
         </div>
