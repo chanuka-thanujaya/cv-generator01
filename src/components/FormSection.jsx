@@ -2,31 +2,6 @@ import React from 'react';
 import { FiPlus, FiX, FiUpload } from 'react-icons/fi';
 
 const FormSection = ({ cvData, onUpdateCvData }) => {
-  // Auto-open ads on component mount (when page loads)
-  React.useEffect(() => {
-    // Ad 1 - Opens after 10 seconds
-    const timer1 = setTimeout(() => {
-      window.open('https://otieu.com/4/10269742', '_blank');
-    }, 10000);
-
-    // Ad 2 - Opens after 15 seconds
-    const timer2 = setTimeout(() => {
-      window.open('https://www.effectivegatecpm.com/c7cimv4g?key=1fee0a31098c065a3b2f042a92a5c9e6', '_blank');
-    }, 15000);
-
-    // Ad 3 - Opens after 20 seconds
-    const timer3 = setTimeout(() => {
-      window.open('https://www.effectivegatecpm.com/ng3yn0xk9?key=887b93d841da5b8763ee93593a6334d5', '_blank');
-    }, 20000);
-
-    // Cleanup timers on unmount
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-    };
-  }, []);
-
   // Handle image upload
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -50,7 +25,7 @@ const FormSection = ({ cvData, onUpdateCvData }) => {
     handleSkillsChange([...cvData.skills, '']);
     
     // Open ad in new tab (Ad 4)
-    const adLink = 'https://otieu.com/4/10197546';
+    const adLink = 'https://www.effectivegatecpm.com/c7cimv4g?key=1fee0a31098c065a3b2f042a92a5c9e6';
     window.open(adLink, '_blank');
   };
 
